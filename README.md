@@ -40,7 +40,7 @@ as each playback of a video will timeout after some time, at which point the URL
 
 ### Credit / Copying
 
-As a work of the United States Government, _dashem_ is 
+As a work of the United States Government, _SignatureMaker_ is 
 in the public domain within the United States. Additionally, 
 Andrew Reed waives copyright and related rights in the work 
 worldwide through the CC0 1.0 Universal public domain dedication 
