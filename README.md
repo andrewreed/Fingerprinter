@@ -36,7 +36,7 @@ as each playback of a video will timeout after some time, at which point the URL
 	This will produce a list of directories that contain the manifests.
 10. Now you may run SignatureMaker:
 
-		cat pathsToManifests.txt | java SignatureMaker >> netflix_signatures.txt
+		cat pathsToManifests.txt | java -jar SignatureMaker.jar >> netflix_signatures.txt
 
 ### Credit / Copying
 
