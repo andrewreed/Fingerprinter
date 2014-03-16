@@ -1,8 +1,7 @@
 ## _SignatureMaker_
 
-A utility to create signatures of Netflix videos. These signatures are used in _dashid_ 
-to identify specific videos in anonymized, header-only network traces. These signatures 
-can also be used to create video profiles for _dashem_.
+A utility to create signatures of Netflix videos that can be  used in _dashid_ 
+to identify specific videos in anonymized, header-only network traces.
 
 _SignatureMaker_ uses a video's manifest to obtain the URLs for each bitrate encoding. It 
 then downloads the header of each encoding's .ismv. The headers are then used to calculate 
