@@ -1,9 +1,9 @@
-## _SignatureMaker_
+## _Fingerprinter_
 
-A utility to create signatures of Netflix videos that can be  used in _dashid_ 
+A utility to create fingerprints of Netflix videos that can be  used in _dashid_ 
 to identify specific videos in anonymized, header-only network traces.
 
-_SignatureMaker_ uses a video's manifest to obtain the URLs for each bitrate encoding. It 
+_Fingerprinter_ uses a video's manifest to obtain the URLs for each bitrate encoding. It 
 then downloads the header of each encoding's .ismv. The headers are then used to calculate 
 the sequence of segment sizes for each encoding.
 
@@ -33,13 +33,13 @@ as each playback of a video will timeout after some time, at which point the URL
 		find . -type d -links 2 | sed 's/^..//' > pathsToManifests.txt
 
 	This will produce a list of directories that contain the manifests.
-10. Now you may run SignatureMaker:
+10. Now you may run Fingerprinter:
 
-		cat pathsToManifests.txt | java -jar SignatureMaker.jar >> netflix_signatures.txt
+		cat pathsToManifests.txt | java -jar Fingerprinter.jar >> netflix_fingerprints.txt
 
 ### Credit / Copying
 
-As a work of the United States Government, _SignatureMaker_ is 
+As a work of the United States Government, _Fingerprinter_ is 
 in the public domain within the United States. Additionally, 
 Andrew Reed waives copyright and related rights in the work 
 worldwide through the CC0 1.0 Universal public domain dedication 

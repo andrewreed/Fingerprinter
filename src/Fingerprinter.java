@@ -10,7 +10,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-public class SignatureMaker {
+public class Fingerprinter {
 
 	public static void main(String args[]) {
 		
