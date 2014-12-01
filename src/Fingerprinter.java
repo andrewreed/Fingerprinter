@@ -2,26 +2,21 @@ import java.util.*;
 import java.math.*;
 import java.io.*;
 import java.net.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 
 public class Fingerprinter {
+
+	private static final int[] BITRATES = {235,375,560,750,1050,1750,2350,3000};
 
 	public static void main(String args[]) {
 		
 		Scanner sc = new Scanner(System.in);
 
 		while (sc.hasNextLine()) {
-			String pathToManifest = sc.nextLine();
+			String pathToURLs = sc.nextLine();
 
-			List<Encoding> encodings = retrieveEncodings(pathToManifest);
+			List<Encoding> encodings = retrieveEncodings(pathToURLs);
 
-			System.out.print(pathToManifest + "\t");
+			System.out.print(pathToURLs + "\t");
 			
 			int[][] segmentSizes = new int[encodings.size()][];
 
@@ -30,7 +25,7 @@ public class Fingerprinter {
 			for (Encoding encoding : encodings) {
 				segmentSizes[count] = encoding.getSegmentSizes();
 
-				System.out.print(encoding.getBitrate());
+				System.out.print(BITRATES[count]);
 
 				count++;
 
@@ -59,50 +54,24 @@ public class Fingerprinter {
 		sc.close();
 	}
 
-	private static List<Encoding> retrieveEncodings(String pathToManifest) {
+	private static List<Encoding> retrieveEncodings(String pathToURLs) {
 		List<Encoding> encodings = new LinkedList<Encoding>();
 		
 		try {
-			File xmlFile = new File(pathToManifest + "/manifest.xml");
-			String xmlString = new String("");
+			File urlList = new File(pathToURLs + "/urls.txt");
 
-			Scanner sc = new Scanner(xmlFile);
+			Scanner sc = new Scanner(urlList);
 
 			while (sc.hasNextLine()) {
-				String line = sc.nextLine();
+				Encoding encoding = new Encoding(sc.nextLine());
 
-				if (line.contains("<HMAC>")) {
-					continue;
-				}
-				else {
-					xmlString += line + "\n";
+				if (encoding.getAvgBitrate() > 100) {
+					encodings.add(encoding);
 				}
 			}
 
 			sc.close();
 
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			InputSource is = new InputSource(new StringReader(xmlString));
-			Document doc = dBuilder.parse(is);
-
-			doc.getDocumentElement().normalize();
-			NodeList nList = doc.getElementsByTagName("nccp:videodownloadable");
-
-			for (int temp = 0; temp < nList.getLength(); temp++) {
- 
-				Node nNode = nList.item(temp);
- 
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
- 
-					Element eElement = (Element) nNode;
- 
-					String bitrate = eElement.getElementsByTagName("nccp:bitrate").item(0).getTextContent();
-					String url = eElement.getElementsByTagName("nccp:url").item(0).getTextContent();
-
-					encodings.add(new Encoding(bitrate, url));
-				}
-			}
 		} catch (Exception e) {
 			System.out.println("ERROR: Unable to retrieve encodings.");
 			System.exit(0);
@@ -113,7 +82,7 @@ public class Fingerprinter {
 		for (int j = 1; j < sortingArray.length; j++) {
 			Encoding key = sortingArray[j];
 			int i = j - 1;
-			while ((i > -1) && (sortingArray[i].getBitrate() > key.getBitrate())) {
+			while ((i > -1) && (sortingArray[i].getAvgBitrate() > key.getAvgBitrate())) {
 				sortingArray[i+1] = sortingArray[i];
 				i--;
 			}

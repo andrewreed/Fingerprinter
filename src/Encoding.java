@@ -10,47 +10,43 @@ public class Encoding {
 	private static final String CONNECTION = "keep-alive";
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; rv:27.0) Gecko/20100101 Firefox/27.0";
 
-	// extra URL items not present in manifest.xml
-	private static final String RANGE = "/range/0-99999?";
-	private static final String RANDOM = "&random=123456789";
-
-	private int bitrate;
-	private String urlOfVideo;
-	private String parameters;
 	private String host;
+	private double avgBitrate;
 	private int[] segmentSizes;
 	private byte[] header;
 
 	// Constructor
-	public Encoding(String bitrate, String url) {
-		this.bitrate = Integer.parseInt(bitrate);
-		parseUrl(url);
-		getHeader();
+	public Encoding(String urlString) {
+		this.host = urlString.split("/")[2];
+
+		getHeader(urlString);
+
 		calculateSegmentSizes();
+
+		double totalSum = 0.0;
+		for (int i = 0; i < segmentSizes.length; i++) {
+			totalSum += segmentSizes[i];
+		}
+
+		this.avgBitrate = (((totalSum / segmentSizes.length) * 8.0) / 4.0) / 1000.0;
+
 	}
 
-	public int getBitrate() {
-		return bitrate;
+	public double getAvgBitrate() {
+		return avgBitrate;
 	}
 
 	public int[] getSegmentSizes() {
 		return segmentSizes;
 	}
 
-	private void parseUrl(String url) {
-		String[] urlHalves = url.split("\\?");
-		urlOfVideo = urlHalves[0];
-		parameters = urlHalves[1];
-		host = urlOfVideo.split("/")[2];
-	}
-
-	private void getHeader() {
+	private void getHeader(String urlString) {
 		URL url;
 		HttpURLConnection conn;
 		InputStream is;
 
 		try {
-			url = new URL(urlOfVideo + RANGE + parameters + RANDOM);
+			url = new URL(urlString);
 
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -82,7 +78,7 @@ public class Encoding {
 	private void calculateSegmentSizes() {
 		int sidxLoc = 0;
 
-		for (int i = 0; i < 99997; i++) {
+		for (int i = 0; i < header.length-3; i++) {
 
 			char c1 = (char) (header[i] & 0xFF);
 			char c2 = (char) (header[i+1] & 0xFF);
