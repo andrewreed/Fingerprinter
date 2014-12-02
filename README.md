@@ -27,7 +27,7 @@ as each playback of a video will timeout after some time, at which point the URL
 
 		./runFingerprinter.bash >> netflix_fingerprints.txt
 
-	This will script will parse the XML files and create text files in each video subfolder that list the URLs needed by Fingerprinter.
+	This script will parse the XML files and create text files in each video subfolder that list the URLs needed by Fingerprinter.
   The script will then run Fingerprinter and provide it with the list of subfolders via stdin.
 11. Once you have run Fingerprinter in Step 10, you should verify that fingerprints were produced correctly. If so, you should delete all 
 folders inside __netflix/__ before creating additional fingerprints.
