@@ -63,7 +63,7 @@ public class Fingerprinter {
 			Scanner sc = new Scanner(urlList);
 
 			while (sc.hasNextLine()) {
-				Encoding encoding = new Encoding(sc.nextLine());
+				Encoding encoding = new Encoding(URLDecoder.decode(sc.nextLine(),"UTF-8"));
 
 				if (encoding.getAvgBitrate() > 100) {
 					encodings.add(encoding);
